@@ -192,7 +192,7 @@ namespace ConsoleAppMySQL
                     string query = "SELECT * FROM generos";
                     MySqlCommand cmd = new MySqlCommand(query, conn);
 
-                    Console.WriteLine(centrar_texto("------ Generos disponibles ------",35));
+                    Console.WriteLine("--------- Generos disponibles ----------");
                     Console.WriteLine();
                     Console.WriteLine($"{centrar_texto("ID",5)} | {centrar_texto("Genero",30)} |");
                     Console.WriteLine("----------------------------------------");
@@ -401,13 +401,14 @@ namespace ConsoleAppMySQL
                 try
                 {
                     conn.Open();
-                    string query = $"UPDATE usuarios SET telefono = @Telefono, email = @Email WHERE id = {v_id}";
+                    string query = $"UPDATE usuarios SET telefono = @Telefono, email = @Email, actualizado_el = now() WHERE id = {v_id}";
                     MySqlCommand cmd = new MySqlCommand(query, conn);
 
                     cmd.Parameters.AddWithValue("@Telefono",telefono);
                     cmd.Parameters.AddWithValue("@Email",email);
 
                     cmd.ExecuteNonQuery();
+
                 }
                 catch (Exception ex)
                 {
@@ -449,7 +450,7 @@ namespace ConsoleAppMySQL
                 try
                 {
                     conn.Open();
-                    string query = $"UPDATE usuarios SET estado = {0} WHERE id = {v_id}";
+                    string query = $"UPDATE usuarios SET estado = {0}, actualizado_el = now() WHERE id = {v_id}";
                     MySqlCommand cmd = new MySqlCommand(query, conn);
 
                     cmd.ExecuteNonQuery();
@@ -469,57 +470,66 @@ namespace ConsoleAppMySQL
             }
 
             static void ingresar_libro(string string_conexion){
-                string? titulo = "",autor = "",fecha_lanzamiento = "";
-                int genero_id = -1;
+                string? titulo = "",autor = "",fecha_lanzamiento = "", query;
+                int genero_id = -1, cant_lineas = 0;
                 bool valido = false;
-
-                try
-                {
-                    while(valido == false)
-                {
-                Console.WriteLine("------ Ingresando libro ------");
-                Console.Write("Ingrese el titulo: ");
-                titulo = Console.ReadLine();
-                Console.Write("Ingrese el autor: ");
-                autor = Console.ReadLine();
-                listar_tablas(3,string_conexion);
-                
-                Console.Write("Ingrese el id del genero: ");
-                genero_id = Convert.ToInt16(Console.ReadLine());
-                Console.Write("Ingrese la fecha de lanzamiento (yyyy-mm-dd): ");
-                fecha_lanzamiento = Console.ReadLine();
-
-                if(titulo != "" & autor != "" & genero_id > 0 & fecha_lanzamiento != "")
-                    {
-                    valido = true;
-                    }
-                else
-                    {
-                    Console.WriteLine("Existen campos vacios o erroneos, ingrese nuevamente");
-                    Console.ReadLine();
-                    Console.Clear();
-                    }
-                }
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine("Ocurrió un error: " + ex.Message);
-                }
-
                 MySqlConnection conn = new MySqlConnection(string_conexion);
+
                 try
                 {
                     conn.Open();
-                    string query = "INSERT INTO libros(titulo,autor,genero_id,fecha_lanzamiento) VALUES (@Titulo,@Autor,@Genero_id,@Fecha_lanzamiento)";
+                    while(valido == false)
+                    {
+                        Console.WriteLine("------ Ingresando libro ------");
+                        Console.Write("Ingrese el titulo: ");
+                        titulo = Console.ReadLine();
+                        Console.Write("Ingrese el autor: ");
+                        autor = Console.ReadLine();
 
-                    MySqlCommand cmd = new MySqlCommand(query, conn);
+                        query = "SELECT id FROM generos";
+                        MySqlCommand cmd = new MySqlCommand(query,conn);
+                        MySqlDataReader reader = cmd.ExecuteReader();
 
-                    cmd.Parameters.AddWithValue("@Titulo",titulo);
-                    cmd.Parameters.AddWithValue("@Autor",autor);
-                    cmd.Parameters.AddWithValue("Genero_id",genero_id);
-                    cmd.Parameters.AddWithValue("@Fecha_lanzamiento",fecha_lanzamiento);
+                        while(reader.Read()) cant_lineas++;
+                        reader.Close();
 
-                    cmd.ExecuteNonQuery();
+                        if(cant_lineas > 0)
+                        {
+                            listar_tablas(3,string_conexion);
+                            
+                            Console.Write("Ingrese el id del genero: ");
+                            genero_id = Convert.ToInt16(Console.ReadLine());
+                            Console.Write("Ingrese la fecha de lanzamiento (yyyy-mm-dd): ");
+                            fecha_lanzamiento = Console.ReadLine();
+
+                            if(titulo != "" & autor != "" & genero_id > 0 & fecha_lanzamiento != "")
+                                {
+                                valido = true;
+                                }
+                            else
+                                {
+                                Console.WriteLine("Existen campos vacios o erroneos, ingrese nuevamente");
+                                Console.ReadLine();
+                                Console.Clear();
+                                }
+                        }
+                        else
+                        {
+                            Console.WriteLine("No existen generos actualmente, debe ingresarlos"); 
+                            Console.ReadLine();
+                            break;
+                        }
+                        query = "INSERT INTO libros(titulo,autor,genero_id,fecha_lanzamiento) VALUES (@Titulo,@Autor,@Genero_id,@Fecha_lanzamiento)";
+
+                        cmd = new MySqlCommand(query, conn);
+
+                        cmd.Parameters.AddWithValue("@Titulo",titulo);
+                        cmd.Parameters.AddWithValue("@Autor",autor);
+                        cmd.Parameters.AddWithValue("Genero_id",genero_id);
+                        cmd.Parameters.AddWithValue("@Fecha_lanzamiento",fecha_lanzamiento);
+
+                        cmd.ExecuteNonQuery();
+                    }
                 }
                 catch (Exception ex)
                 {
@@ -569,11 +579,11 @@ namespace ConsoleAppMySQL
                     conn.Open();
                     if(opcion == 0)
                     {
-                        query = $"UPDATE libros set estado = 0 WHERE id = {id_libro}";
+                        query = $"UPDATE libros set estado = 0, actualizado_el = now() WHERE id = {id_libro}";
                     }
                     else
                     {
-                        query = $"UPDATE libros set estado = 1 WHERE id = {id_libro}";
+                        query = $"UPDATE libros set estado = 1, actualizado_el = now() WHERE id = {id_libro}";
                     }
                     
 
@@ -745,13 +755,42 @@ namespace ConsoleAppMySQL
             }
 
             static void crear_prestamo(string string_conexion){
-                int id_libros = -1, id_usuarios = -1;
+                int id_libros = -1, id_usuarios = -1, cant_usuarios = 0, cant_libros = 0;
                 bool valido = false;
 
                 MySqlConnection conn = new MySqlConnection(string_conexion);
                 try
                 {
-                    while(valido == false)
+                    conn.Open();
+
+                    string query = "SELECT id FROM usuarios where estado = 1";
+                    MySqlCommand cmd = new MySqlCommand(query,conn);
+                    MySqlDataReader reader = cmd.ExecuteReader();
+
+                    while(reader.Read()) cant_usuarios++;
+                    reader.Close();
+
+                    
+                    query = "SELECT id FROM libros where estado = 1";
+                    cmd = new MySqlCommand(query,conn);
+                    reader = cmd.ExecuteReader();
+
+                    while(reader.Read()) cant_libros++;
+                    reader.Close();
+
+                    if(cant_usuarios==0)
+                    {
+                        Console.WriteLine("No hay usuarios activos actualmente");
+                        Console.ReadLine();
+                    }
+                    else if(cant_libros == 0)
+                    {
+                        Console.WriteLine("No hay libros cargados o disponibles actualmente");
+                        Console.ReadLine();
+                    }
+                    else
+                    {
+                        while(valido == false)
                     {
                         listar_tablas(1,string_conexion);
                         Console.Write("Ingrese el id del libro disponible que sera alquilado: ");
@@ -772,10 +811,9 @@ namespace ConsoleAppMySQL
                         }
                     }
 
-                    conn.Open();
-                    string query = @$"INSERT INTO prestamos(fecha_entrega_estimada,id_libros,id_usuarios) VALUES (date_add(now(), interval 7 day),@ID_libros,@ID_usuarios)";
+                    query = @$"INSERT INTO prestamos(fecha_entrega_estimada,id_libros,id_usuarios) VALUES (date_add(now(), interval 7 day),@ID_libros,@ID_usuarios)";
 
-                    MySqlCommand cmd = new MySqlCommand(query, conn);
+                    cmd = new MySqlCommand(query, conn);
 
                     cmd.Parameters.AddWithValue("@ID_libros",id_libros);
                     cmd.Parameters.AddWithValue("@ID_usuarios",id_usuarios);
@@ -786,6 +824,7 @@ namespace ConsoleAppMySQL
                     cmd = new MySqlCommand(query, conn);
 
                     cmd.ExecuteNonQuery();
+                    }
                 }
                 catch (Exception ex)
                 {
@@ -914,8 +953,8 @@ namespace ConsoleAppMySQL
                     case 9: crear_prestamo(string_conexion); break;
                     case 10: actualizar_prestamo(string_conexion); break;
                     case 11: listar_tablas(5,string_conexion); Console.Clear(); break;
-                    case 12: listar_tablas(4,string_conexion); Console.Clear(); break;
-                    case 13: listar_tablas(2,string_conexion); Console.Clear(); break;
+                    case 12: listar_tablas(4,string_conexion); Console.ReadLine(); Console.Clear(); break;
+                    case 13: listar_tablas(2,string_conexion); Console.ReadLine(); Console.Clear(); break;
                     default: Console.WriteLine($"Error, el valor {opcion} no es valido, trate nuevamente"); break;
                     
                     }
