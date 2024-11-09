@@ -1615,9 +1615,9 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\juanl\\OneDrive\\Escritorio\\UTN RE\\BDD\\TrabajoFede\\TrabajoFede.csproj",
-      "projectName": "TrabajoFede",
-      "projectPath": "C:\\Users\\juanl\\OneDrive\\Escritorio\\UTN RE\\BDD\\TrabajoFede\\TrabajoFede.csproj",
+      "projectUniqueName": "C:\\Users\\juanl\\OneDrive\\Escritorio\\UTN RE\\BDD\\TrabajoFede\\c#.csproj",
+      "projectName": "c#",
+      "projectPath": "C:\\Users\\juanl\\OneDrive\\Escritorio\\UTN RE\\BDD\\TrabajoFede\\c#.csproj",
       "packagesPath": "C:\\Users\\juanl\\.nuget\\packages\\",
       "outputPath": "C:\\Users\\juanl\\OneDrive\\Escritorio\\UTN RE\\BDD\\TrabajoFede\\obj\\",
       "projectStyle": "PackageReference",

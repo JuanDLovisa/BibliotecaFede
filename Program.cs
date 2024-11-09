@@ -92,14 +92,16 @@ namespace ConsoleAppMySQL
                     string query = "SELECT id, nombre, apellido FROM usuarios where estado = 1";
                     MySqlCommand cmd = new MySqlCommand(query, conn);
 
-                    Console.WriteLine(centrar_texto("------ Usuarios activos ------",45));
+                    Console.WriteLine("------------------Usuarios activos-------------------");
                     Console.WriteLine();
                     Console.WriteLine($"{centrar_texto("ID",5)} | {centrar_texto("Nombre",20)} | {centrar_texto("Apellido",20)} |");
+                    Console.WriteLine("-----------------------------------------------------");
 
                     MySqlDataReader reader = cmd.ExecuteReader();
                     while (reader.Read())
                     {  
                         Console.WriteLine($"{centrar_texto(Convert.ToString(reader["id"]),5)} | {centrar_texto(Convert.ToString(reader["nombre"]),20)} | {centrar_texto(Convert.ToString(reader["apellido"]),20)} |");
+                        Console.WriteLine("-----------------------------------------------------");
                     }
                 }
                 catch (Exception ex)
@@ -118,17 +120,24 @@ namespace ConsoleAppMySQL
                 {
                     conn.Open();
 
-                    string query = "SELECT id, titulo from libros where estado = 1";
+                    string query = "SELECT id, titulo, estado from libros where estado = 1";
+                    string? est = "";
                     MySqlCommand cmd = new MySqlCommand(query, conn);
 
-                    Console.WriteLine(centrar_texto("------ Libros disponibles ------",35));
+                    Console.WriteLine("-----------Libros disponibles-----------");
                     Console.WriteLine();
                     Console.WriteLine($"{centrar_texto("ID",5)} | {centrar_texto("Titulo",30)} |");
+                    Console.WriteLine("----------------------------------------");
 
                     MySqlDataReader reader = cmd.ExecuteReader();
                     while (reader.Read())
                     {
-                        Console.WriteLine($"{centrar_texto(Convert.ToString(reader["id"]),5)} | {centrar_texto(Convert.ToString(reader["titulo"]),30)} |");
+                        est = reader["estado"].ToString();
+                        if(est == "True")
+                        {
+                            Console.WriteLine($"{centrar_texto(Convert.ToString(reader["id"]),5)} | {centrar_texto(Convert.ToString(reader["titulo"]),30)} |");
+                            Console.WriteLine("----------------------------------------");
+                        }
                     }
                     
                 }
@@ -151,13 +160,15 @@ namespace ConsoleAppMySQL
                     string query = "SELECT p.id, u.nombre, u.apellido, l.titulo FROM prestamos as p JOIN libros as l ON p.id_libros = l.id JOIN usuarios as u ON p.id_usuarios = u.id WHERE p.fecha_entrega_real IS NULL";
                     MySqlCommand cmd = new MySqlCommand(query, conn);
 
-                    Console.WriteLine(centrar_texto("------ Prestamos actuales ------",75));
+                    Console.WriteLine("-----------------------------------Prestamos actuales---------------------------------");
                     Console.WriteLine();
-                    Console.WriteLine($"{centrar_texto("ID",5)} | {centrar_texto("Nombre",20)} | {centrar_texto("Apellido",20)} | {centrar_texto("Titulo",30)} |");
+                    Console.WriteLine($"{centrar_texto("ID",5)} | {centrar_texto("Nombre",20)} | {centrar_texto("Apellido",20)} | {centrar_texto("Libro Prestado",30)} |");
+                    Console.WriteLine("--------------------------------------------------------------------------------------");
                     MySqlDataReader reader = cmd.ExecuteReader();
                 while (reader.Read())
                  {
                         Console.WriteLine($"{centrar_texto(Convert.ToString(reader["id"]),5)} | {centrar_texto(Convert.ToString(reader["nombre"]),20)} | {centrar_texto(Convert.ToString(reader["apellido"]),20)} | {centrar_texto(Convert.ToString(reader["titulo"]),30)} |");
+                        Console.WriteLine("--------------------------------------------------------------------------------------");
                  }
                     
                 }
@@ -184,11 +195,13 @@ namespace ConsoleAppMySQL
                     Console.WriteLine(centrar_texto("------ Generos disponibles ------",35));
                     Console.WriteLine();
                     Console.WriteLine($"{centrar_texto("ID",5)} | {centrar_texto("Genero",30)} |");
+                    Console.WriteLine("----------------------------------------");
 
                     MySqlDataReader reader = cmd.ExecuteReader();
                     while (reader.Read())
                     {
                         Console.WriteLine($"{centrar_texto(Convert.ToString(reader["id"]),5)} | {centrar_texto(Convert.ToString(reader["descripcion"]),30)} |");
+                        Console.WriteLine("----------------------------------------");
                     }
                     reader.Close();
                 }
@@ -208,17 +221,28 @@ namespace ConsoleAppMySQL
                 {
                     conn.Open();
 
-                    string query = "SELECT id, titulo from libros";
+                    string query = "SELECT id, titulo, estado from libros";
+                    string estado = "";
                     MySqlCommand cmd = new MySqlCommand(query, conn);
 
-                    Console.WriteLine(centrar_texto("------ Generos disponibles ------",35));
+                    Console.WriteLine("-------------------Libros Cargados-------------------");
                     Console.WriteLine();
-                    Console.WriteLine($"{centrar_texto("ID",5)} | {centrar_texto("Titulo",30)} |");
+                    Console.WriteLine($"{centrar_texto("ID",5)} | {centrar_texto("Titulo",30)} | {centrar_texto("Estado",10)} | ");
+                    Console.WriteLine("-----------------------------------------------------");
 
                     MySqlDataReader reader = cmd.ExecuteReader();
                     while (reader.Read())
                     {
-                        Console.WriteLine($"{centrar_texto(Convert.ToString(reader["id"]),5)} | {reader["titulo"]} |");
+                        if(reader["estado"].ToString() == "True")
+                        {
+                            estado = "Activo";
+                        }
+                        else
+                        {
+                            estado = "Inactivo";
+                        }
+                        Console.WriteLine($"{centrar_texto(Convert.ToString(reader["id"]),5)} | {centrar_texto(Convert.ToString(reader["titulo"]),30)} | {centrar_texto(estado,10)} |");
+                        Console.WriteLine("-----------------------------------------------------");
                     }
                     
                 }
@@ -230,6 +254,46 @@ namespace ConsoleAppMySQL
                 {
                     Console.WriteLine();
                     conn.Close();
+                }
+                break;
+
+                case 5:
+                try
+                {
+                    conn.Open();
+
+                    string query = "SELECT id, nombre, apellido, estado FROM usuarios";
+                    MySqlCommand cmd = new MySqlCommand(query, conn);
+
+                    Console.WriteLine("-----------------------Usuarios cargados------------------------");
+                    Console.WriteLine();
+                    Console.WriteLine($"{centrar_texto("ID",5)} | {centrar_texto("Nombre",20)} | {centrar_texto("Apellido",20)} |  Estado  |");
+                    Console.WriteLine("----------------------------------------------------------------");
+
+                    MySqlDataReader reader = cmd.ExecuteReader();
+                    while (reader.Read())
+                    {
+                        if(reader["estado"].ToString() == "True")
+                        {
+                            Console.WriteLine($"{centrar_texto(Convert.ToString(reader["id"]),5)} | {centrar_texto(Convert.ToString(reader["nombre"]),20)} | {centrar_texto(Convert.ToString(reader["apellido"]),20)} |  Activo  |");
+                            Console.WriteLine("----------------------------------------------------------------");
+                        }
+                        else
+                        {
+                            Console.WriteLine($"{centrar_texto(Convert.ToString(reader["id"]),5)} | {centrar_texto(Convert.ToString(reader["nombre"]),20)} | {centrar_texto(Convert.ToString(reader["apellido"]),20)} | Inactivo |");
+                            Console.WriteLine("----------------------------------------------------------------");
+                        }  
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("Ocurrió un error: " + ex.Message);
+                }
+                finally 
+                {
+                    Console.ReadLine();
+                    conn.Close();
+                    Console.Clear();
                 }
                 break;
 
@@ -477,7 +541,7 @@ namespace ConsoleAppMySQL
                 string query = "";
                 MySqlConnection conn = new MySqlConnection(string_conexion);
                 listar_tablas(4,string_conexion);
-                listar_tablas(1,string_conexion);
+
 
                 try
                 {
@@ -809,6 +873,8 @@ namespace ConsoleAppMySQL
                     Console.Clear();
                 }
      }
+
+
         static void Main(string[] args)
         {
             string string_conexion = "server=localhost;database=biblioteca;user=root;pwd=123456789";
@@ -828,6 +894,9 @@ namespace ConsoleAppMySQL
                     Console.WriteLine("Opcion 8: Actualizar genero");
                     Console.WriteLine("Opcion 9: Crear prestamo");
                     Console.WriteLine("Opcion 10: Actualizar prestamo");
+                    Console.WriteLine("Opcion 11: Listar usuarios"); 
+                    Console.WriteLine("Opcion 12: Listar libros"); 
+                    Console.WriteLine("Opcion 13: Listar prestamos");
                     Console.WriteLine("Opcion 0: Salir");
                     opcion = Convert.ToInt16(Console.ReadLine());
                     Console.Clear();
@@ -844,6 +913,9 @@ namespace ConsoleAppMySQL
                     case 8: actualizar_genero(string_conexion); break;
                     case 9: crear_prestamo(string_conexion); break;
                     case 10: actualizar_prestamo(string_conexion); break;
+                    case 11: listar_tablas(5,string_conexion); Console.Clear(); break;
+                    case 12: listar_tablas(4,string_conexion); Console.Clear(); break;
+                    case 13: listar_tablas(2,string_conexion); Console.Clear(); break;
                     default: Console.WriteLine($"Error, el valor {opcion} no es valido, trate nuevamente"); break;
                     
                     }

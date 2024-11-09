@@ -1,23 +1,23 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Usuario\\Desktop\\c#\\c#.csproj": {}
+    "C:\\Users\\juanl\\OneDrive\\Escritorio\\UTN RE\\BDD\\TrabajoFede\\c#.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Usuario\\Desktop\\c#\\c#.csproj": {
+    "C:\\Users\\juanl\\OneDrive\\Escritorio\\UTN RE\\BDD\\TrabajoFede\\c#.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Usuario\\Desktop\\c#\\c#.csproj",
+        "projectUniqueName": "C:\\Users\\juanl\\OneDrive\\Escritorio\\UTN RE\\BDD\\TrabajoFede\\c#.csproj",
         "projectName": "c#",
-        "projectPath": "C:\\Users\\Usuario\\Desktop\\c#\\c#.csproj",
-        "packagesPath": "C:\\Users\\Usuario\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Usuario\\Desktop\\c#\\obj\\",
+        "projectPath": "C:\\Users\\juanl\\OneDrive\\Escritorio\\UTN RE\\BDD\\TrabajoFede\\c#.csproj",
+        "packagesPath": "C:\\Users\\juanl\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\juanl\\OneDrive\\Escritorio\\UTN RE\\BDD\\TrabajoFede\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
-          "E:\\Visual Studio Comunity\\Shared\\NuGetPackages"
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
         ],
         "configFilePaths": [
-          "C:\\Users\\Usuario\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\juanl\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
@@ -71,7 +71,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.303/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.400/PortableRuntimeIdentifierGraph.json"
         }
       }
     }
