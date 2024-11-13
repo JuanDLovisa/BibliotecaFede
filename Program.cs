@@ -317,13 +317,13 @@ namespace ConsoleAppMySQL
                 Console.Write("Ingrese el Email: ");
                 email = Console.ReadLine();
 
-                if(nombre != "" & apellido != "" & dni != "" & telefono != "" & email != "")
+                if(!string.IsNullOrEmpty(nombre) && !string.IsNullOrEmpty(apellido) && !string.IsNullOrEmpty(dni) && !string.IsNullOrEmpty(telefono) && !string.IsNullOrEmpty(email) && nombre.Length <= 20 && apellido.Length <= 20 && dni.Length <= 8 &&  telefono.Length <= 12 && email.Length <= 50)
                     {
                     valido = true;
                     }
                 else
                     {
-                    Console.WriteLine("Existen campos vacios, ingrese nuevamente");
+                    Console.WriteLine("Existen campos incorrectos, ingrese nuevamente");
                     Console.ReadLine();
                     Console.Clear();
                     }
@@ -380,7 +380,7 @@ namespace ConsoleAppMySQL
                 Console.Write("Ingrese el Email: ");
                 email = Console.ReadLine();
 
-                if(telefono != "" & email != "" & v_id > 0)
+                if(!string.IsNullOrEmpty(telefono) && !string.IsNullOrEmpty(email) && email.Length <= 50 && telefono.Length <= 12 && v_id > 0)
                     {
                     valido = true;
                     }
@@ -443,7 +443,14 @@ namespace ConsoleAppMySQL
                         Console.WriteLine("Ocurrió un error: " + ex.Message);
                     }
 
-                    if(v_id>0) valido = true;
+                    if(v_id>0)
+                    {
+                        valido = true;
+                    } 
+                    else
+                    {
+                        Console.WriteLine("Ingrese un id valido");
+                    }
                 }
 
                 MySqlConnection conn = new MySqlConnection(string_conexion);
@@ -502,7 +509,7 @@ namespace ConsoleAppMySQL
                             Console.Write("Ingrese la fecha de lanzamiento (yyyy-mm-dd): ");
                             fecha_lanzamiento = Console.ReadLine();
 
-                            if(titulo != "" & autor != "" & genero_id > 0 & fecha_lanzamiento != "")
+                            if(!string.IsNullOrEmpty(titulo) && !string.IsNullOrEmpty(autor) && genero_id > 0 && !string.IsNullOrEmpty(fecha_lanzamiento) && titulo.Length <= 30 && autor.Length <= 20)
                                 {
                                 valido = true;
                                 }
@@ -559,7 +566,14 @@ namespace ConsoleAppMySQL
                     {
                         Console.Write("Ingrese el id del libro a actualizar: ");
                         id_libro = Convert.ToInt16(Console.ReadLine());
-                        if(id_libro>0) valido = true;
+                        if(id_libro>0)
+                        {
+                            valido = true;
+                        } 
+                        else
+                        {
+                            Console.WriteLine("Ingrese un id valido");
+                        }
                     }
                     valido = false;
                     while(valido == false)
@@ -625,7 +639,10 @@ namespace ConsoleAppMySQL
                         Console.WriteLine("Ocurrió un error: " + ex.Message);
                     }
 
-                    if(v_id>0) valido = true;
+                    if(v_id>0)
+                    {
+                        
+                    } valido = true;
                 }
 
                 MySqlConnection conn = new MySqlConnection(string_conexion);
@@ -666,7 +683,7 @@ namespace ConsoleAppMySQL
                         Console.Write("Ingrese el nuevo genero: ");
                         descripcion = Console.ReadLine();
 
-                        if(descripcion != "")
+                        if(!string.IsNullOrEmpty(descripcion))
                         {
                             valido = true;
                         }
@@ -719,7 +736,7 @@ namespace ConsoleAppMySQL
                         Console.Write("Ingrese el nuevo genero: ");
                         descripcion = Console.ReadLine();
 
-                        if(descripcion != "" & v_id > 0)
+                        if(!string.IsNullOrEmpty(descripcion) & v_id > 0)
                         {
                             valido = true;
                         }
